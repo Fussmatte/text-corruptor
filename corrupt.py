@@ -2,10 +2,15 @@ from googletrans import Translator # Make sure you pip install googletrans
 import googletrans, random
 translator = Translator() # Making a new translator instance
 
+nostring = "No string."
+
 def corrupt(text,langnum,endlang): # This function will corrupt any text fed into it
+    if text.isspace() or text == "":
+        return nostring
     # text = string var, the text to be corrupted
     # langnum = the amount of languages to put it through, randomly chosen
     # endlang = code for the final language to translate to ("en" for English)
+    print("Corrupting...")
     alllangs = googletrans.LANGUAGES # loads a table of all language codes
     lastlang = endlang # lastlang = the previous language in each corruption cycle
     langsforthiscall = [] # a table that will contain all the languages to
@@ -23,7 +28,7 @@ def corrupt(text,langnum,endlang): # This function will corrupt any text fed int
         
     return lasttext # here's your final corrupted text!
 
-oldcorruption = "" # failsafe in case someone tries to call 'cycle' at the beginning of runtime
+oldcorruption = "!NO_OLD_CORRUPTION" # failsafe in case someone tries to call 'cycle' at the beginning of runtime
 
 while True:
     # prompts for text, which goes into tobetranslated
@@ -32,7 +37,12 @@ while True:
     if tobetranslated == "exit":
         break
     elif tobetranslated == "cycle":
-        tobetranslated = oldcorruption # will corrupt the old corruption
+        if oldcorruption != "!NO_OLD_CORRUPTION":
+            tobetranslated = oldcorruption # will corrupt the old corruption
+        else:
+            oldcorruption = nostring
+            print("\n"+nostring)
+            continue
 
     # this command will do the honours, and store it into oldcorruption
     # for future use by the cycle command
