@@ -29,6 +29,7 @@ def corrupt(text,langnum,endlang): # This function will corrupt any text fed int
     return lasttext # here's your final corrupted text!
 
 oldcorruption = "!NO_OLD_CORRUPTION" # failsafe in case someone tries to call 'cycle' at the beginning of runtime
+oldtobetranslated = "!NO_OLD_TBT" # and same for 'redo'
 
 while True:
     # prompts for text, which goes into tobetranslated
@@ -36,6 +37,13 @@ while True:
 
     if tobetranslated == "exit":
         break
+    elif tobetranslated == "redo":
+        if oldtobetranslated != "!NO_OLD_TBT":
+            tobetranslated = oldtobetranslated # will retry for a new corruption with old text
+        else:
+            oldtobetranslated = nostring
+            print("\n"+nostring)
+            continue
     elif tobetranslated == "cycle":
         if oldcorruption != "!NO_OLD_CORRUPTION":
             tobetranslated = oldcorruption # will corrupt the old corruption
@@ -44,6 +52,7 @@ while True:
             print("\n"+nostring)
             continue
 
+    oldtobetranslated = tobetranslated
     # this command will do the honours, and store it into oldcorruption
     # for future use by the cycle command
     oldcorruption = corrupt(tobetranslated,9,"en")
