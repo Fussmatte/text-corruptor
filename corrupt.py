@@ -29,7 +29,7 @@ from glob import glob
 from os import path, listdir
 
 config = ConfigParser()
-progver = "v1.0.1"
+progver = "v1.0.2"
 
 def _(message): return message
 
@@ -70,13 +70,13 @@ def set_uilang(lang):
     
     with open('config.ini', 'w') as f:
         config.write(f)
-    return _("Set language to %s") % (locale.get_display_name())
+    return "\u001b[32m"+_("Set language to %s") % (locale.get_display_name())+"\u001b[0m"
 
 set_uilang(uilang)
 
 translator = Translator() # Making a new translator instance
 
-nostring = _("ERROR: Please enter a string.")
+nostring = "\u001b[31m"+_("ERROR: Please enter a string.")+"\u001b[0m"
 dummymode = False
 
 def corrupt(text,langnum,endlang): # This function will corrupt any text fed into it
@@ -103,7 +103,7 @@ def corrupt(text,langnum,endlang): # This function will corrupt any text fed int
                 lasttext = translator.translate(lasttext, dest=lang).text #the actual translate command
                 lastlang = lang # so that the next cycle knows what language to translate from
             except: # If an error occurs while trying to grab output, throw message
-                print(_("FATAL: Server returned an error, try again later."))
+                print("\u001b[31m"+_("FATAL: Server returned an error, try again later.")+"\u001b[0m")
                 return 0
                 break
     if dummymode:
@@ -111,7 +111,7 @@ def corrupt(text,langnum,endlang): # This function will corrupt any text fed int
     return lasttext # here's your final corrupted text!
 
 def launch_text():
-    print(_("Text Corruptor") + " " + progver)
+    print("\u001b[33;1m"+_("Text Corruptor") + " " + progver+"\u001b[0m")
     print(_("Type /h and press ENTER for instructions."))
 
 oldcorruption = "!NO_OLD_CORRUPTION" # failsafe in case someone tries to call 'cycle' at the beginning of runtime
@@ -121,11 +121,11 @@ launch_text()
 
 while True:
     # prompts for text, which goes into tobetranslated
-    tobetranslated = input(">> ")
+    tobetranslated = input("\u001b[1m>>\u001b[0m ")
 
     if tobetranslated == "!NO_OLD_CORRUPTION" or tobetranslated == "!NO_OLD_TBT":
         tobetranslated = ""
-        print(_("Nice try!"))
+        print("\u001b[31m"+_("Nice try!")+"\u001b[0m")
         continue
     elif tobetranslated == "/q":
         break
@@ -156,10 +156,10 @@ while True:
             continue
     elif tobetranslated == "/d":
         if not dummymode:
-            print(_("Dummy mode active. Use command again to disable."))
+            print("\u001b[33m"+_("Dummy mode active. Use command again to disable.")+"\u001b[0m")
             dummymode = True
         else:
-            print(_("Dummy mode inactive."))
+            print("\u001b[33m"+_("Dummy mode inactive.")+"\u001b[0m")
             dummymode = False
         continue
     elif tobetranslated.startswith('/l='):
@@ -169,7 +169,7 @@ while True:
             launch_text()
         else:
             locale = babel.Locale.parse(uilang)
-            print(_("Language is already %s") % (locale.get_display_name()))
+            print("\u001b[31m"+_("Language is already %s") % (locale.get_display_name())+"\u001b[0m")
         continue
     elif tobetranslated.startswith('/e='):
         newoutputlang = tobetranslated.replace('/e=','')
@@ -181,7 +181,7 @@ while True:
             with open('config.ini', 'w') as f:
                 config.write(f)
         else:
-            print(_("Language not found or is already set."))
+            print("\u001b[31m"+_("Language not found or is already set.")+"\u001b[0m")
         continue
     elif tobetranslated == "" or tobetranslated.isspace():
         print(nostring)
@@ -192,4 +192,4 @@ while True:
     # for future use by the cycle command
     oldcorruption = corrupt(tobetranslated,9,outputlang)
     if not oldcorruption==0:
-        print("  -> " + oldcorruption) #prints the corruption
+        print("\u001b[32m\u001b[1m>>\u001b[0m\u001b[32m " + oldcorruption+"\u001b[0m") #prints the corruption
