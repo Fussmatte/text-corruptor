@@ -29,7 +29,7 @@ from glob import glob
 from os import path, listdir
 
 config = ConfigParser()
-progver = "v1.0"
+progver = "v1.0.1"
 
 def _(message): return message
 
@@ -45,6 +45,7 @@ if not path.exists("config.ini"):
 else:
     config.read('config.ini')
     uilang = config.get('main', 'lang')
+    outputlang = config.get('main', 'outputlang')
 
 def available_langs():
     return os.listdir("locale")
@@ -64,12 +65,12 @@ def set_uilang(lang):
         else:
             lang="en"
             _ = lambda s: s
-    return _("Set language to %s") % (locale.get_display_name())
     config.read('config.ini')
     config.set('main', 'lang', lang)
     
     with open('config.ini', 'w') as f:
         config.write(f)
+    return _("Set language to %s") % (locale.get_display_name())
 
 set_uilang(uilang)
 
@@ -77,7 +78,6 @@ translator = Translator() # Making a new translator instance
 
 nostring = _("ERROR: Please enter a string.")
 dummymode = False
-outputlang = "en"
 
 def corrupt(text,langnum,endlang): # This function will corrupt any text fed into it
     if text.isspace() or text == "":
