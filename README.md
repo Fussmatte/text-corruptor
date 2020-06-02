@@ -3,11 +3,17 @@ Puts text through a translator several times 'til it's just bad
 
 ## what you need
 - Python 3 or greater
-- the `googletrans` thing that you gotta install with pip
-- the `babel` thing that you also gotta install with pip
+- that's literally it.
 
-## how to use this thing
-so just like run it in terminal, and it'll prompt you for your text.
+## how to run
+```bash
+pip3 install -r requirements.txt
+python3 corrupt.py
+```
+
+it'll prompt you for your text.
+
+## commands
 - `/h` - Display the help page
 - `/q` or `/e` - Exit the program
 - `/c` - Recorrupt the last corruption
